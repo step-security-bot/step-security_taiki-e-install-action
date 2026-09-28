@@ -118,10 +118,6 @@ If you want to ensure that fallback is not used, use `fallback: none`.
 
 On platforms where cargo-binstall does not provide prebuilt binaries, cargo-install fallback is used instead of cargo-binstall fallback.
 
-### Add support for new tool
-
-See the [development guide](DEVELOPMENT.md) for how to add support for new tool.
-
 ## Security
 
 The `@v<major>` and `@<tool_name>` tags are updated with each release. If you want to enhance workflow stability and security against supply chain attacks, consider using the `@v<major>.<minor>.<patch>` tag or their hash to pin the version and regularly updating with [dependency cooldown]. Since all releases are immutable, pinning the version in either way should have the same effect. Pinning `@<tool_name>` tags by hash is strongly discouraged, as it causes the workflow to reference a [commit that is not present on the repository](https://docs.zizmor.sh/audits/#impostor-commit) when a new version is released.
@@ -181,7 +177,3 @@ Licensed under
 
 Each of the tools installed by this action has a different license. See the
 [Supported tools](#supported-tools) section for more information.
-
-Unless you explicitly state otherwise, any contribution intentionally submitted
-for inclusion in the work by you, as defined in the Apache-2.0 license, shall
-be dual licensed as above, without any additional terms or conditions.
