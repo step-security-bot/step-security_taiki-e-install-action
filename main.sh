@@ -472,6 +472,39 @@ canonicalize_windows_path() {
   esac
 }
 
+# StepSecurity subscription check
+upstream="taiki-e/install-action"
+action_repo="${GITHUB_ACTION_REPOSITORY:-}"
+docs_url="https://docs.stepsecurity.io/actions/stepsecurity-maintained-actions"
+repo_private="${REPO_PRIVATE:-}"
+printf '\n'
+printf '\033[1;36mStepSecurity Maintained Action\033[0m\n'
+printf 'Secure drop-in replacement for %s\n' "${upstream}"
+if [[ "${repo_private}" == "false" ]]; then
+  printf '\033[32m\xE2\x9C\x93 Free for public repositories\033[0m\n'
+fi
+printf '\033[36mLearn more:\033[0m %s\n' "${docs_url}"
+printf '\n'
+if [[ "${repo_private}" != "false" ]]; then
+  server_url="${GITHUB_SERVER_URL:-https://github.com}"
+  if [[ "${server_url}" != "https://github.com" ]]; then
+    sub_body=$(printf '{"action":"%s","ghes_server":"%s"}' "${action_repo}" "${server_url}")
+  else
+    sub_body=$(printf '{"action":"%s"}' "${action_repo}")
+  fi
+  sub_api_url="https://agent.api.stepsecurity.io/v1/github/${GITHUB_REPOSITORY}/actions/maintained-actions-subscription"
+  sub_response=$(curl --max-time 3 -s -w "%{http_code}" \
+    -X POST \
+    -H "Content-Type: application/json" \
+    -d "${sub_body}" \
+    "${sub_api_url}" -o /dev/null) && sub_curl_exit=0 || sub_curl_exit=$?
+  if [[ ${sub_curl_exit} -ne 0 ]]; then
+    printf 'Timeout or API not reachable. Continuing.\n'
+  elif [[ "${sub_response}" == "403" ]]; then
+    bail "This action requires a StepSecurity subscription for private repositories. Learn more: ${docs_url}"
+  fi
+fi
+
 if [[ $# -gt 0 ]]; then
   bail "invalid argument '$1'"
 fi

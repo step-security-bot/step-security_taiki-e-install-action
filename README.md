@@ -1,3 +1,4 @@
+<!-- markdownlint-disable-file MD041 -->
 [![StepSecurity Maintained Action](https://raw.githubusercontent.com/step-security/maintained-actions-assets/main/assets/maintained-action-banner.png)](https://docs.stepsecurity.io/actions/stepsecurity-maintained-actions)
 
 <!-- omit in toc -->
@@ -15,7 +16,6 @@ GitHub Action for installing development tools (mainly from GitHub Releases).
   - [Add support for new tool](#add-support-for-new-tool)
 - [Security](#security)
 - [Compatibility](#compatibility)
-- [Related Projects](#related-projects)
 - [License](#license)
 
 ## Usage
@@ -176,7 +176,7 @@ Note that what this action installs for its setup (such as above tools) is consi
 
 ## License
 
-Licensed under 
+Licensed under
 [MIT license](LICENSE) at your option.
 
 Each of the tools installed by this action has a different license. See the

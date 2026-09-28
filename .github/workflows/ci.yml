@@ -27,12 +27,7 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  tidy:
-    uses: taiki-e/github-actions/.github/workflows/tidy.yml@2026.9.9
-    permissions:
-      security-events: write # for github/codeql-action/*
   test-manifest-schema:
-    needs: tidy
     uses: taiki-e/github-actions/.github/workflows/rust-test.yml@2026.9.9
     with:
       test-args: --exclude install-action-internal-codegen
@@ -40,6 +35,7 @@ jobs:
 
   generate-matrix:
     runs-on: ubuntu-24.04
+    timeout-minutes: 5
     outputs:
       matrix: ${{ steps.set.outputs.matrix }}
     steps:
@@ -119,7 +115,7 @@ jobs:
           fi
 
   test:
-    needs: [tidy, generate-matrix]
+    needs: [generate-matrix]
     strategy:
       fail-fast: false
       matrix: ${{ fromJson(needs.generate-matrix.outputs.matrix) }}
@@ -243,7 +239,6 @@ jobs:
         if: matrix.bash != 'cygwin' && matrix.os != 'windows-11-arm' && !startsWith(matrix.container, 'opensuse')
 
   test-alias:
-    needs: tidy
     runs-on: ubuntu-24.04
     timeout-minutes: 60
     steps:
@@ -270,7 +265,6 @@ jobs:
         shell: sh
 
   test-fallback:
-    needs: tidy
     strategy:
       fail-fast: false
       matrix:
@@ -283,7 +277,7 @@ jobs:
     runs-on: ubuntu-24.04-arm
     timeout-minutes: 60
     steps:
-      - uses: https://github.com/taiki-e/checkout-action/blob/HEAD/.github/workflows/ci.yml
+      - uses: taiki-e/checkout-action@v1
       # cross attempts to install rust-src when Cargo.toml is available even if `cross --version`
       - run: rm -- Cargo.toml
       - run: env

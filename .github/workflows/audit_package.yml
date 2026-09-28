@@ -14,15 +14,17 @@ on:
   schedule:
     - cron: "0 0 * * 1"
 
+permissions:
+  contents: read
+
 jobs:
   audit-fix:
     uses: step-security/reusable-workflows/.github/workflows/audit_fix.yml@v1
+    permissions:
+      contents: write
+      pull-requests: write
+      packages: read
+      issues: write
     with:
       force: ${{ inputs.force || false }}
       base_branch: ${{ inputs.base_branch || 'main' }}
-
-permissions:
-  contents: write
-  pull-requests: write
-  packages: read
-  issues: write
