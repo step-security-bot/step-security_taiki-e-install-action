@@ -1,0 +1,17 @@
+[package]
+name = "install-action-manifest-schema"
+version = "0.3.0"
+edition = "2021"
+publish = []
+
+[lib]
+doc-scrape-examples = false
+
+# Note: semver and serde are public dependencies.
+[dependencies]
+semver = { version = "1", features = ["serde"] }
+serde = "1.0.165"
+serde_derive = "1.0.165"
+
+[lints]
+workspace = true
